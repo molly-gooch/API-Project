@@ -13,8 +13,10 @@ import java.net.URL;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import com.openai.OpenAI;
 
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -31,6 +33,9 @@ public class Project {
     private JPanel panel2;
     private JPanel panel3;
     private JPanel panel4;
+
+    private JLabel l1;
+    private JLabel l2;
 
     private JButton b1;
     private JButton b2;
@@ -68,6 +73,8 @@ public class Project {
         panel3.setLayout(new BorderLayout());
         panel4.setLayout(new BorderLayout());
 
+        l1 = new JLabel("put %20 between words");
+        l2 = new JLabel("be specific or else");
 
         ta1 = new JTextArea();
         ta2 = new JTextArea();
@@ -76,8 +83,10 @@ public class Project {
         mainFrame.add(panel1);
         panel101.add(ta1);
         panel1.add(panel101, BorderLayout.CENTER);
+        panel101.add(l1, BorderLayout.NORTH);
         panel1.add(panel102, BorderLayout.CENTER);
         panel102.add(ta2);
+        panel102.add(l2, BorderLayout.NORTH);
         panel103.add(ta3);
         panel1.add(panel103, BorderLayout.CENTER);
         mainFrame.add(panel2);
@@ -89,15 +98,18 @@ public class Project {
         String output1 = "abc";
         String output2 = "abc";
         String output3 = "abc";
+        String output4 = "abc";
         String totlaJson1 = "";
         String totlaJson2 = "";
         String totlaJson3 = "";
+        String totlaJson4 = "";
 
 
         String apiKey = "6fG+e/V/5n45lzPE5UKMCQ==ecwp26yUZKx9j9Ur";
 
         try {
 
+            System.out.println(ta1.getText());
             URL url1 = new URL("https://api.api-ninjas.com/v1/animals?name=" + ta1.getText());
             URL url2 = new URL("https://api.api-ninjas.com/v1/animals?name=" + ta2.getText());
             URL url3 = new URL("https://api.api-ninjas.com/v1/animals?name=" + ta3.getText());
@@ -176,30 +188,62 @@ public class Project {
         }
 
         JSONParser parser1 = new JSONParser();
-        org.json.simple.JSONObject jsonObject1 = (org.json.simple.JSONObject) parser1.parse(totlaJson1);
-        System.out.println(jsonObject1);
+
 
         JSONParser parser2 = new JSONParser();
-        org.json.simple.JSONObject jsonObject2 = (org.json.simple.JSONObject) parser2.parse(totlaJson2);
-        System.out.println(jsonObject2);
+
 
         JSONParser parser3 = new JSONParser();
-        org.json.simple.JSONObject jsonObject3 = (org.json.simple.JSONObject) parser3.parse(totlaJson3);
-        System.out.println(jsonObject3);
 
         try {
+            //find way to iterate through array to get first option then get name of first option
+            org.json.simple.JSONArray jsonArray1 = (org.json.simple.JSONArray) parser1.parse(totlaJson1);
+            String name = null;
+            for (int i = 0; i < 1; i = i + 1) {
+                JSONObject ob1 = (JSONObject) jsonArray1.get(i);
+                name = (String) ob1.get("name");
+                System.out.println(name);
+            }
 
-            String name1 = (String) jsonObject1.get("name");
-            System.out.println(name1);
+            org.json.simple.JSONArray jsonArray2 = (org.json.simple.JSONArray) parser2.parse(totlaJson2);
+            String name2 = null;
+            for (int i = 0; i < 1; i = i + 1) {
+                JSONObject ob2 = (JSONObject) jsonArray2.get(i);
+                name2 = (String) ob2.get("name");
+                System.out.println(name2);
+            }
 
+            org.json.simple.JSONArray jsonArray3 = (org.json.simple.JSONArray) parser3.parse(totlaJson3);
+            String name3 = null;
+            for (int i = 0; i < 1; i = i + 1) {
+                JSONObject ob3 = (JSONObject) jsonArray3.get(i);
+                name3 = (String) ob3.get("name");
+                System.out.println(name3);
+            }
 
+//            URL url4 = new URL("https://api.openai.com/v1/images/generations");
+//            HttpURLConnection conn4 = (HttpURLConnection) url4.openConnection();
+//            conn4.setRequestMethod("GET");
+//            conn4.setRequestProperty("Accept", "application/json");
+//            String apiKey2 = "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";
+//            conn4.setRequestProperty("X-Api-Key", apiKey2);
+//            if (conn4.getResponseCode() != 200) {
+//
+//                throw new RuntimeException("Failed : HTTP error code : "
+//                        + conn4.getResponseCode());
+//            }
+//            BufferedReader br4 = new BufferedReader(new InputStreamReader(
+//                    (conn4.getInputStream())));
+//
+//            System.out.println("Output from Server .... \n");
+//            while ((output4 = br4.readLine()) != null) {
+//                System.out.println(output4);
+//                totlaJson4 += output4;
+//            }
+//            conn4.disconnect();
 
-            String name2 = (String) jsonObject2.get("name");
-            System.out.println(name2);
-
-            String name3 = (String) jsonObject3.get("name");
-            System.out.println(name3);
-
+            OpenAI client = new OpenAI();
+            client.images().generate("dall-e-3", "image of these three animals made into a new animal: " + name + name2 + name3, 1, "1024x1024");
 
 
         } catch (Exception e) {
