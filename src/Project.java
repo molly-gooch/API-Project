@@ -13,7 +13,7 @@ import java.net.URL;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.openai.OpenAI;
+//import com.openai.OpenAI;
 
 
 import org.json.simple.JSONArray;
@@ -242,8 +242,8 @@ public class Project {
 //            }
 //            conn4.disconnect();
 
-            OpenAI client = new OpenAI();
-            client.images().generate("dall-e-3", "image of these three animals made into a new animal: " + name + name2 + name3, 1, "1024x1024");
+            //OpenAI client = new OpenAI();
+           // client.images().generate("dall-e-3", "image of these three animals made into a new animal: " + name + name2 + name3, 1, "1024x1024");
 
 
         } catch (Exception e) {
